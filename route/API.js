@@ -4,8 +4,15 @@ app.get('/', (req, res) => {
     res.json({ message: "You're home" });
 });
 
-app.use('/file', require('./file'));
-app.use('/student', require('./student'));
-app.use('/fruit', require('./fruit'));
+/**
+ * Added the routes or a group of routes in a directory using
+ * app.use(middleware)
+ * 
+ * Ex:-
+ * app.use('/user', require('./users/profile'));
+ * app.use('/user', require('./users/orders'));
+ * 
+ * In this way, we can create many nested routes
+ */
 
 module.exports = app;
