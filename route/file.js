@@ -6,6 +6,10 @@ app.post('/', Storage.upload.single('file'), (req, res) => {
     res.json(req.file);
 });
 
+app.post('/multiple', Storage.upload.array('file'), (req, res) => {
+    res.json(req.files);
+});
+
 app.get('/:id', (req, res) => {
     Storage.retrieve(req, res);
 });

@@ -5,7 +5,5 @@ app.get('/', (req, res) => {
 });
 
 app.use('/file', require('./file'));
-app.use('/student', require('./student'));
-app.use('/fruit', require('./fruit'));
 
 module.exports = app;
