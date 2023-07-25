@@ -1,1 +1,1 @@
-DELETE http://localhost:3000/file/64bbd00c64fb6f3acf457651
+GET http://localhost:3000/file/64bfa5c60090babe47bda18b

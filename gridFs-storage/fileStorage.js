@@ -37,6 +37,19 @@ function Retrieve(req, res) {
                     err: "no files exist"
                 });
         }
+
+        /**
+         * The following header helps us to retrieve file with correct format.
+         */
+        res.setHeader("Content-Type", files[0].contentType);
+
+        /**
+         * The following header helps us to set the original filename(as saved) in the attachment.
+         * @param {*} inline allow the file to be viewable on the browser
+         * @param {*} attachment allow the file to be downloadable on the browser
+         */
+        res.setHeader("Content-Disposition", `inline; filename="${files[0].filename}"`);
+
         bucket.openDownloadStream(new mongoose.Types.ObjectId(req.params.id))
             .pipe(res);
     }
