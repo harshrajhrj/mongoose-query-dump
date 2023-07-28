@@ -11,7 +11,9 @@ app.post('/', Storage.upload.single('file'), (req, res) => {
 });
 
 app.post('/multiple', Storage.upload.array('files'), (req, res) => {
-    res.json(req.files);
+    res.json({
+        message: 'Uploaded'
+    });
 });
 
 app.get('/:id', (req, res) => {
