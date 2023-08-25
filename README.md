@@ -3,3 +3,6 @@ In Mongoose query dump, we've gone through various types of Mongoose ODM queries
 
 ## Content-Disposition
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition
+
+## Aggregation pipeline
+* [Issue](https://stackoverflow.com/questions/41761660/mongodb-inc-and-setoninsert-for-nested-array)
