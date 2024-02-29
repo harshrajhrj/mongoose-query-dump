@@ -8,7 +8,7 @@ module.exports = async function connection() {
             useNewUrlParser: true,
             useUnifiedTopology: true
         }
-        await mongoose.connect(process.env.DB_URL, connectionParams);
+        await mongoose.connect(process.env.DB, connectionParams);
         console.log('Connected to Storage!!');
     } catch (err) {
         console.log(err.message);

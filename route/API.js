@@ -1,8 +1,13 @@
+const { upload } = require('../FileHandling/Blob');
 const app = require('express').Router();
 
 app.get('/', (req, res) => {
     res.json({ message: "You're home" });
 });
+
+app.post('/', upload.single('file'), async (req, res) => {
+    res.json(req.file);
+})
 
 /**
  * Added the routes or a group of routes in a directory using
