@@ -29,7 +29,7 @@ MyCustomStorage.prototype._handleFile = function _handleFile(req, file, cb) {
 }
 
 MyCustomStorage.prototype._removeFile = function _removeFile(req, file, cb) {
-    this.bucket.delete(file.id, cb);
+    bucket.delete(file.id, cb);
 }
 
 const storage = new MyCustomStorage()
