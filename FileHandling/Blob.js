@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
 const multer = require('multer');
-// const { GridFsStorage } = require('multer-gridfs-storage');
+const mongoose = require('mongoose');
 
 let bucket;
 mongoose.connection.on("connected", () => {
@@ -9,24 +8,34 @@ mongoose.connection.on("connected", () => {
         bucketName: 'gridFiles'
     })
     console.log('Storage engine is connected');
-})
+});
 
-// const storage = new GridFsStorage({
-//     url: process.env.DB,
-//     file: (req, file) => {
-//         return new Promise((resolve, reject) => {
-//             const filename = file.originalname;
-//             const fileInfo = {
-//                 filename: filename,
-//                 bucketName: "gridFiles"
-//             };
-//             resolve(fileInfo);
-//         });
-//     }
-// });
+function MyCustomStorage(opts) {
+
+}
+
+MyCustomStorage.prototype._handleFile = function _handleFile(req, file, cb) {
+    var outStream = bucket.openUploadStream(file.originalname, { contentType: file.mimetype });
+
+    file.stream.pipe(outStream)
+    outStream.on('error', cb)
+    outStream.on('finish', function () {
+        cb(null, {
+            size: outStream.gridFSFile.length,
+            _id: outStream.gridFSFile._id,
+            uploadDate: outStream.gridFSFile.uploadDate
+        })
+    })
+}
+
+MyCustomStorage.prototype._removeFile = function _removeFile(req, file, cb) {
+    this.bucket.delete(file.id, cb);
+}
+
+const storage = new MyCustomStorage()
 
 const upload = multer({
-    storage
+    storage: storage
 })
 
 function Retrieve(req, res) {
@@ -50,26 +59,24 @@ function Retrieve(req, res) {
          */
         res.setHeader("Content-Disposition", `inline; filename="${files[0].filename}"`);
 
-        bucket.openDownloadStream(new mongoose.Types.createFromHexString(req.params.id))
+        bucket.openDownloadStream(mongoose.Types.ObjectId.createFromHexString(req.params.id))
             .pipe(res);
     }
 
     const file = bucket
         .find({
-            _id: new mongoose.Types.ObjectId.createFromHexString(req.params.id)
+            _id: mongoose.Types.ObjectId.createFromHexString(req.params.id)
         })
         .toArray();
     file.then(callback);
 }
 
 function Rename(id, NewName) {
-    const file = bucket.rename(new mongoose.Types.ObjectId(id), NewName);
-    return file;
+    bucket.rename(id, NewName);
 }
 
 function Delete(id) {
-    const file = bucket.delete(new mongoose.Types.ObjectId(id));
-    return file;
+    bucket.delete(id);
 }
 
 module.exports = { upload: upload, retrieve: Retrieve, rename: Rename, delete: Delete };

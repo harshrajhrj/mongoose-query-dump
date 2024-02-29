@@ -1,12 +1,16 @@
-const { upload } = require('../FileHandling/Blob');
+const { upload, retrieve } = require('../FileHandling/Blob');
 const app = require('express').Router();
 
 app.get('/', (req, res) => {
     res.json({ message: "You're home" });
 });
 
-app.post('/', upload.single('file'), async (req, res) => {
-    res.json(req.file);
+app.post('/', upload.array('file'), async (req, res) => {
+    res.json(req.files);
+})
+
+app.get('/:id', (req, res) => {
+    retrieve(req, res);
 })
 
 /**
